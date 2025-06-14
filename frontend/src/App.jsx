@@ -6,6 +6,12 @@ import ServiceCards from "./components/ServiceCards";
 import VideoConsultation from "./components/VideoConsultation";
 import FindDoctors from "./components/FindDoctors";
 import Surgeries from "./components/Surgeries";
+import ConsultSection from "./components/ConsultSection";
+import InClinicSection from "./components/InClinicSection";
+import HealthArticles from "./components/HealthArticles";
+import Testimonial from "./components/Testimonial";
+import Footer from "./components/Footer";
+
 
 function App() {
   const [count, setCount] = useState(0);
@@ -23,6 +29,11 @@ function App() {
               <>
                 <SearchSection />
                 <ServiceCards />
+                <ConsultSection/>
+                <InClinicSection/>
+                <HealthArticles/>
+                <Testimonial/>
+                <Footer/>
               </>
             }
           />
