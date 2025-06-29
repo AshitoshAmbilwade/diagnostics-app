@@ -29,7 +29,7 @@ const __dirname = path.dirname(__filename);
 
 // ✅ Proper CORS setup
 app.use(cors({
-  origin: 'https://diagnostics-app.vercel.app/',
+  origin: ['http://localhost:5173', 'https://diagnostics-app.vercel.app/'],
   credentials: true,
 }));
 
