@@ -3,11 +3,58 @@ import Doctor from '../models/Doctor.js';
 // Create a new doctor
 export const createDoctor = async (req, res) => {
   try {
-    const doctor = new Doctor(req.body);
-    const savedDoctor = await doctor.save();
-    res.status(201).json(savedDoctor);
-  } catch (err) {
-    res.status(400).json({ message: err.message });
+    const {
+      specialization,
+      experience,
+      location,
+      bio,
+      photo,
+      price,
+    } = req.body;
+
+    // 1️⃣ Check if doctor already exists
+    const existing = await Doctor.findOne({ email });
+    if (existing) {
+      return res.status(400).json({ message: "Doctor already registered with this email." });
+    }
+
+    // 2️⃣ Hash the password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // 3️⃣ Create doctor
+    const newDoctor = new Doctor({
+      
+      
+      specialization,
+      experience,
+      location,
+      bio,
+      photo,
+      price,
+    });
+
+    const savedDoctor = await newDoctor.save();
+
+    // 4️⃣ Create JWT token
+    const token = jwt.sign({ id: savedDoctor._id, role: "doctor" }, JWT_SECRET, {
+      expiresIn: "7d",
+    });
+
+    // 5️⃣ Respond
+    res.status(201).json({
+      message: "Doctor registered successfully",
+      doctor: {
+        id: savedDoctor._id,
+        name: savedDoctor.name,
+        email: savedDoctor.email,
+        specialization: savedDoctor.specialization,
+      },
+      token,
+    });
+
+  } catch (error) {
+    console.error("❌ Error in doctor registration:", error.message);
+    res.status(500).json({ message: "Internal server error during doctor registration." });
   }
 };
 

@@ -8,11 +8,10 @@ const patientStorySchema = new mongoose.Schema({
 }, { _id: false });
 
 const doctorSchema = new mongoose.Schema({
-  name: { type: String, required: true },
+  
   photo: { type: String }, // URL to profile image
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-  specialization: { type: String, required: true },
-  experience: { type: Number, required: true }, // in years
+  specialization: { type: String},
+  experience: { type: Number}, // in years
   location: String,
   price: String,
   ratings: { type: Number, default: 0 },

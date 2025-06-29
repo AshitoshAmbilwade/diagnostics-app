@@ -11,16 +11,13 @@ const Header = () => {
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 10);
-
     const handleClickOutside = (e) => {
       if (menuRef.current && !menuRef.current.contains(e.target)) {
         setIsMenuOpen(false);
       }
     };
-
     window.addEventListener("scroll", handleScroll);
     document.addEventListener("mousedown", handleClickOutside);
-
     return () => {
       window.removeEventListener("scroll", handleScroll);
       document.removeEventListener("mousedown", handleClickOutside);
@@ -64,16 +61,13 @@ const Header = () => {
         scrolled ? "shadow-md py-0" : "shadow-sm py-0"
       }`}
     >
-      {/* MAIN HEADER BAR */}
       <div className="w-full px-6 sm:px-6 lg:px-10 flex items-center justify-between h-20">
-        {/* Logo */}
         <div className="flex items-center space-x-1">
           <span className="w-2 h-2 bg-sky-400 rounded-full"></span>
           <h1 className="text-blue-950 text-3xl font-bold mb-3">practo</h1>
           <span className="w-2 h-2 bg-sky-400 rounded-full"></span>
         </div>
 
-        {/* Desktop Navigation */}
         <nav className="hidden lg:flex space-x-8 text-base font-normal">
           {navLinks.map((link) => (
             <Link
@@ -86,7 +80,6 @@ const Header = () => {
           ))}
         </nav>
 
-        {/* Right Menu */}
         <div className="hidden ml-3 lg:flex items-center space-x-6">
           {dropdownMenus.map(({ label, links, key }) => (
             <div key={key} className="relative group">
@@ -121,7 +114,10 @@ const Header = () => {
               </div>
             </div>
           ))}
-          <button
+
+          {/* ✅ Desktop Login/Signup */}
+          <Link
+            to="/auth"
             style={{
               backgroundColor: "#ffffff",
               color: "#102146",
@@ -131,6 +127,7 @@ const Header = () => {
               fontSize: "16px",
               fontWeight: "normal",
               transition: "all 200ms ease-in-out",
+              textAlign: "center",
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.backgroundColor = "#f9fafb";
@@ -140,7 +137,7 @@ const Header = () => {
             }}
           >
             Login / Signup
-          </button>
+          </Link>
         </div>
 
         {/* Mobile menu button */}
@@ -212,28 +209,30 @@ const Header = () => {
               </div>
             ))}
 
-            <div className="pt-2">
-              <button
-                style={{
-                  backgroundColor: "#ffffff",
-                  color: "#102146",
-                  border: "1px solid #d4d4d4",
-                  padding: "8px 20px",
-                  borderRadius: "8px",
-                  fontSize: "16px",
-                  fontWeight: "normal",
-                  transition: "all 200ms ease-in-out",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = "#f9fafb";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = "#ffffff";
-                }}
-              >
-                Login / Signup
-              </button>
-            </div>
+            {/* ✅ Mobile Login/Signup */}
+            <Link
+              to="/auth"
+              style={{
+                display: "block",
+                backgroundColor: "#ffffff",
+                color: "#102146",
+                border: "1px solid #d4d4d4",
+                padding: "12px 20px",
+                borderRadius: "8px",
+                fontSize: "16px",
+                fontWeight: "normal",
+                transition: "all 200ms ease-in-out",
+                textAlign: "center",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = "#f9fafb";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = "#ffffff";
+              }}
+            >
+              Login / Signup
+            </Link>
           </div>
         </div>
       </div>
