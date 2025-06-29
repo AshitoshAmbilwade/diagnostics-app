@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const instance = axios.create({
-  baseURL: 'http://localhost:5000/api', // your backend API root
+  baseURL: 'https://diagnostics-app-1.onrender.com/', // your backend API root
   headers: {
     'Content-Type': 'application/json',
   },
