@@ -6,5 +6,20 @@ const instance = axios.create({
     'Content-Type': 'application/json',
   },
 });
+// ✅ Automatically attach token to every request (if exists)
+instance.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('token'); // Or from cookies if you use cookies
+
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
 
 export default instance;

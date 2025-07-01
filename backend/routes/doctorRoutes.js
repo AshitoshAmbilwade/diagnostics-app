@@ -10,8 +10,8 @@ import {
 const router = express.Router();
 
 // Routes
-router.post("/doctors/register", createDoctor);
-router.get('/', getAllDoctors);
+router.post("/register", createDoctor);
+router.get('/all', getAllDoctors);
 router.get('/:id', getDoctorById);
 router.put('/:id', updateDoctor);
 router.delete('/:id', deleteDoctor);

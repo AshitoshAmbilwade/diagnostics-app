@@ -8,7 +8,7 @@ const patientStorySchema = new mongoose.Schema({
 }, { _id: false });
 
 const doctorSchema = new mongoose.Schema({
-  
+  email: String,
   photo: { type: String }, // URL to profile image
   specialization: { type: String},
   experience: { type: Number}, // in years
@@ -19,5 +19,6 @@ const doctorSchema = new mongoose.Schema({
   bio: String,
   patientStories: [patientStorySchema],
 }, { timestamps: true });
+
 
 export default mongoose.model('Doctor', doctorSchema);

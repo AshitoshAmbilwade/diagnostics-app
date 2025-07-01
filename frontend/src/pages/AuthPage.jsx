@@ -41,50 +41,53 @@ const AuthPage = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
-    setIsLoading(true);
+  e.preventDefault();
+  setError("");
+  setIsLoading(true);
 
-    try {
-      const url = isLogin ? "/users/login" : "/users/register";
-      
-      // Prepare payload based on form type
-      const payload = isLogin
-        ? {
-            email: formData.email,
-            password: formData.password,
-            role: formData.role,
-          }
-        : formData;
+  try {
+    const url = isLogin ? "/users/login" : "/users/register";
 
-      const res = await axios.post(url, payload);
-      
-      // Store token and user data
-      localStorage.setItem("token", res.data.token);
-      localStorage.setItem("userData", JSON.stringify(res.data.user));
-      
-      toast.success(
-        isLogin 
-          ? `Welcome back, ${res.data.user.name}!` 
-          : "Account created successfully!"
-      );
-      
-      // ✅ Role-based redirection
-    if (formData.role === "doctor") {
+    const payload = isLogin
+      ? {
+          email: formData.email,
+          password: formData.password,
+          role: formData.role
+        }
+      : formData;
+
+    const res = await axios.post(url, payload);
+
+    // ✅ Store the actual role from DB, not from formData
+    const userRole = res.data.user.role;
+
+    localStorage.setItem("token", res.data.token);
+    localStorage.setItem("userData", JSON.stringify(res.data.user));
+    localStorage.setItem("userEmail", res.data.user.email);
+    localStorage.setItem("userRole", userRole);
+
+    toast.success(
+      isLogin
+        ? `Welcome back, ${res.data.user.name}!`
+        : "Account created successfully!"
+    );
+
+    // ✅ Role-based redirection
+    if (userRole === "doctor") {
       navigate("/doctor/dashboard");
     } else {
       navigate("/user/dashboard");
     }
-    } catch (err) {
-      const errorMessage = err.response?.data?.message || 
-                          err.message || 
-                          "Something went wrong";
-      setError(errorMessage);
-      toast.error(errorMessage);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  } catch (err) {
+    const errorMessage =
+      err.response?.data?.message || err.message || "Something went wrong";
+    setError(errorMessage);
+    toast.error(errorMessage);
+  } finally {
+    setIsLoading(false);
+  }
+};
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 to-blue-100 px-4 py-8">
@@ -268,6 +271,7 @@ const AuthPage = () => {
             >
               {isLogin ? "Sign Up" : "Sign In"}
             </button>
+            
           </p>
         </div>
       </div>

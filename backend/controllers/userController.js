@@ -43,6 +43,12 @@ export const registerUser = async (req, res) => {
   }
 };
 
+export const getCurrentUser = (req, res) => {
+  if (!req.user) return res.status(401).json({ message: "User not authenticated" });
+  res.json(req.user);
+};
+
+
 // ✅ Login user
 export const loginUser = async (req, res) => {
   try {

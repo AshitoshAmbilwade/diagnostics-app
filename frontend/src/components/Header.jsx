@@ -2,12 +2,14 @@
 
 import { useState, useEffect, useRef } from "react";
 import { Menu, X, ChevronDown } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const menuRef = useRef(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 10);
@@ -16,6 +18,10 @@ const Header = () => {
         setIsMenuOpen(false);
       }
     };
+
+    // Check token initially
+    setIsAuthenticated(!!localStorage.getItem("token"));
+
     window.addEventListener("scroll", handleScroll);
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
@@ -23,6 +29,13 @@ const Header = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("userEmail");
+    setIsAuthenticated(false); // 🔄 Re-render
+    navigate("/auth"); // 🔁 Redirect
+  };
 
   const navLinks = [
     { name: "Find Doctors", path: "/find-doctors" },
@@ -115,32 +128,57 @@ const Header = () => {
             </div>
           ))}
 
-          {/* ✅ Desktop Login/Signup */}
-          <Link
-            to="/auth"
-            style={{
-              backgroundColor: "#ffffff",
-              color: "#102146",
-              border: "1px solid #d4d4d4",
-              padding: "8px 20px",
-              borderRadius: "8px",
-              fontSize: "16px",
-              fontWeight: "normal",
-              transition: "all 200ms ease-in-out",
-              textAlign: "center",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = "#f9fafb";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = "#ffffff";
-            }}
-          >
-            Login / Signup
-          </Link>
+          {/* 🔁 Auth Toggle Button (Desktop) */}
+          {isAuthenticated ? (
+            <button
+              onClick={handleLogout}
+              style={{
+                backgroundColor: "#ffffff",
+                color: "#102146",
+                border: "1px solid #d4d4d4",
+                padding: "8px 20px",
+                borderRadius: "8px",
+                fontSize: "16px",
+                fontWeight: "normal",
+                transition: "all 200ms ease-in-out",
+                textAlign: "center",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = "#f9fafb";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = "#ffffff";
+              }}
+            >
+              Logout
+            </button>
+          ) : (
+            <Link
+              to="/auth"
+              style={{
+                backgroundColor: "#ffffff",
+                color: "#102146",
+                border: "1px solid #d4d4d4",
+                padding: "8px 20px",
+                borderRadius: "8px",
+                fontSize: "16px",
+                fontWeight: "normal",
+                transition: "all 200ms ease-in-out",
+                textAlign: "center",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = "#f9fafb";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = "#ffffff";
+              }}
+            >
+              Login / Signup
+            </Link>
+          )}
         </div>
 
-        {/* Mobile menu button */}
+        {/* Mobile menu toggle */}
         <button
           className="lg:hidden p-2 rounded-md bg-gray-100 hover:bg-gray-200 transition-colors"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -209,30 +247,44 @@ const Header = () => {
               </div>
             ))}
 
-            {/* ✅ Mobile Login/Signup */}
-            <Link
-              to="/auth"
-              style={{
-                display: "block",
-                backgroundColor: "#ffffff",
-                color: "#102146",
-                border: "1px solid #d4d4d4",
-                padding: "12px 20px",
-                borderRadius: "8px",
-                fontSize: "16px",
-                fontWeight: "normal",
-                transition: "all 200ms ease-in-out",
-                textAlign: "center",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = "#f9fafb";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = "#ffffff";
-              }}
-            >
-              Login / Signup
-            </Link>
+            {/* 🔁 Auth Toggle Button (Mobile) */}
+            {isAuthenticated ? (
+              <button
+                onClick={handleLogout}
+                style={{
+                  display: "block",
+                  backgroundColor: "#ffffff",
+                  color: "#102146",
+                  border: "1px solid #d4d4d4",
+                  padding: "12px 20px",
+                  borderRadius: "8px",
+                  fontSize: "16px",
+                  fontWeight: "normal",
+                  transition: "all 200ms ease-in-out",
+                  textAlign: "center",
+                }}
+              >
+                Logout
+              </button>
+            ) : (
+              <Link
+                to="/auth"
+                style={{
+                  display: "block",
+                  backgroundColor: "#ffffff",
+                  color: "#102146",
+                  border: "1px solid #d4d4d4",
+                  padding: "12px 20px",
+                  borderRadius: "8px",
+                  fontSize: "16px",
+                  fontWeight: "normal",
+                  transition: "all 200ms ease-in-out",
+                  textAlign: "center",
+                }}
+              >
+                Login / Signup
+              </Link>
+            )}
           </div>
         </div>
       </div>
